@@ -1,7 +1,20 @@
-
 import { LitElement, html, css } from 'lit';
 import "./nasa-image.js";
+
 export class NasaSearch extends LitElement {
+
+  static get tag() {
+    return 'nasa-search';
+  }
+
+  constructor() {
+    super();
+    this.value = null;
+    this.title = '';
+    this.loading = false;
+    this.items = [];
+  }
+
   static get properties() {
     return {
       title: { type: String },
@@ -28,7 +41,6 @@ export class NasaSearch extends LitElement {
         transition-delay: .5s;
         transition: .5s all ease-in-out;
       }
-
       details {
         margin: 16px;
         padding: 16px;
@@ -48,14 +60,6 @@ export class NasaSearch extends LitElement {
     `;
   }
 
-  constructor() {
-    super();
-    this.value = null;
-    this.title = '';
-    this.loading = false;
-    this.items = [];
-  }
-
   render() {
     return html`
     <h2>${this.title}</h2>
@@ -67,10 +71,14 @@ export class NasaSearch extends LitElement {
     </details>
     <div class="results">
       ${this.items.map((item, index) => html`
-      <nasa-image
-        source="${item.links[0].href}"
-        title="${item.data[0].title}"
-      ></nasa-image>
+        <a href="${item.links[0].href}" target="_blank">
+          <nasa-image
+            source="${item.links[0].href}"
+            title="${item.data[0].title}"
+            alt="alt text"
+            owner="${item.data[0].secondary_creator}">
+          </nasa-image>
+        </a>
       `)}
     </div>
     `;
@@ -103,10 +111,6 @@ export class NasaSearch extends LitElement {
         this.loading = false;
       }  
     });
-  }
-
-  static get tag() {
-    return 'nasa-search';
   }
 }
 customElements.define(NasaSearch.tag, NasaSearch);
